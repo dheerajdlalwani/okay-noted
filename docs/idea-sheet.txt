@@ -1,0 +1,50 @@
+iteration — 0
+
+    - WhatsApp self group replacement
+    
+    - text only
+
+    - situation
+        - user working on laptop
+        - need to note something and want it to be accessible on my phone too
+
+    - proposed solution
+
+        - client A —> web extension 
+        - client B —> mobile app
+
+    - client A
+
+        - UI
+            - textarea
+            - send button + (ctrl + enter to send)
+            - item to be sent —> (timestamp, message)
+
+        - logic
+            - implement a queue of unsent messages —> message_queue
+            
+            - event —> send button is pressed
+                - current_timestamp = capture_timestamp()
+                - message_in_textarea = capture_message_in_textarea()
+                - payload = tuple(current_timestamp, message_in_textarea)
+                - enqueue(message_queue, payload)
+            
+            - event —> retry button is clicked
+            
+            - check online status
+            
+            - if online
+                - while queue not empty
+                    - message_to_be_sent = start(message_queue)
+                    - payload = tuple(current_timestamp, message_to_be_sent)
+                    - acknowledgement = send(payload)
+                    - if acknowledgement
+                        - show on UI —> blue text
+                        - dequeue(message_queue)
+                    - else
+                        - show on UI —> red text
+                        - show on UI —> retry button [data: message]
+            - else
+                - disable sent button
+                - placeholder —> client offline, please connect to the internet
+            
